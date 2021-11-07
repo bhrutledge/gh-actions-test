@@ -26,6 +26,8 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
-          python -m pip install tox tox-gh-actions
+          python -m pip install tox
       - name: Run tests
-        run: python -m tox -vv
+        # Turning "3.6" into "py36"
+        run: |
+          python -m tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
