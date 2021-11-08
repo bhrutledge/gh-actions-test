@@ -26,7 +26,7 @@ jobs:
       - name: Run tests
         # Turning "3.6" into "py36"
         run: |
-          python -m tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
+          python -m tox -e py$(echo ${{ matrix.python-version }} | tr -d .) -- --color=yes
       - name: Publish test report
         uses: mikepenz/action-junit-report@v2
         if: always()
