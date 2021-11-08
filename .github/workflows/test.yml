@@ -27,8 +27,10 @@ jobs:
         # Turning "3.6" into "py36"
         run: |
           python -m tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+      - name: Test results
+        uses: dorny/test-reporter@v1
         if: always()
         with:
-          files: junit-*.xml
+          name: Python tests
+          path: junit-*.xml
+          reporter: java-junit
