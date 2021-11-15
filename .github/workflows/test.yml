@@ -4,13 +4,20 @@ on:
   push:
 
 jobs:
+
   test:
+
     strategy:
+      fail-fast: false
       matrix:
         python-version:
           - "3.6"
+          - "3.8"
+
     runs-on: ubuntu-18.04
+
     steps:
+
       - name: Write JSON
         run: |
           echo '{
@@ -18,24 +25,30 @@ jobs:
             "two": "2"
           }' > test.json
           python3 -m json.tool test.json
+
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v2
+
+      - name: Cache tox environments
+        uses: actions/cache@v2
         with:
           path: |
             .tox
           key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt', 'tox.ini') }}
+
       - name: Install dependencies
         run: |
           python -m pip install tox
-      - name: Run tests
+
+      - name: Set TOXENV
         # Turning "3.6" into "py36"
         run: |
-          python -m tox -e py$(echo ${{ matrix.python-version }} | tr -d .) -- --color=yes
-      - name: Publish test report
-        uses: mikepenz/action-junit-report@v2
-        if: always()
-        with:
-          report_paths: 'junit-*.xml'
+          echo TOXENV=py${{ matrix.python-version }} | tr -d . >> $GITHUB_ENV
+
+      - name: Run ${{ env.TOXENV }} tests
+        run: |
+          python -m tox -- --color=yes
