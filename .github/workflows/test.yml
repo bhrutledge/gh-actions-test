@@ -61,9 +61,13 @@ jobs:
             .tox
           key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt', 'tox.ini') }}
 
+      - name: Install dependencies
+        run: |
+          python -m pip install tox
+
       - name: Run ${{ env.TOXENV }} tests
         run: |
-          pipx run tox
+          tox
 
       - name: Upload ${{ env.TOXENV }} coverage
         uses: actions/upload-artifact@v2
