@@ -2,6 +2,8 @@ name: test
 
 on:
   push:
+  schedule:
+    cron: "* * * * *"
 
 jobs:
 
@@ -17,6 +19,10 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+
+      - name: Show environment variables
+        run: |
+          env | sort
 
       - name: Set environment variables
         # TOXENV=py36
