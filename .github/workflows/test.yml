@@ -2,8 +2,11 @@ name: test
 
 on:
   push:
-  schedule:
-    - cron: "*/5 * * * *"
+    branches:
+      - main
+    tags:
+      - "*.*.*"
+  pull_request:
   workflow_dispatch:
 
 env:
