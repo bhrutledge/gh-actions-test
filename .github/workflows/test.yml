@@ -71,6 +71,7 @@ jobs:
 
       - name: Upload ${{ env.TOXENV }} coverage
         uses: actions/upload-artifact@v2
+        if: env.TOXENV == 'py38'
         with:
           name: coverage-${{ env.TOXENV }}-${{ env.ARTIFACT_SUFFIX }}
           path: htmlcov-${{ env.TOXENV }}
