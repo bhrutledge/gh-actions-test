@@ -75,3 +75,12 @@ jobs:
         with:
           name: coverage-${{ env.TOXENV }}-${{ env.ARTIFACT_SUFFIX }}
           path: htmlcov-${{ env.TOXENV }}
+
+      - name: Show output
+        run: |
+          for stack in dev staging prod; do
+            echo "::group::$stack"
+            cat junit-${{ env.TOXENV }}.xml | tee junit-$stack.txt
+            echo "::notice title=junit $stack::$(cat junit-$stack.txt)"
+            echo "::endgroup::"
+          done
